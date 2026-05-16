@@ -5,171 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ระบบจับเวลาคาเฟ่รถตัก FN MODEL EXCAVATOR</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 20px;
-            -webkit-user-select: none;
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-        }
-
-        .controls-top {
-            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px;
-        }
-
-        input[type="number"], input[type="text"] {
-            background: #333; border: 1px solid #444; color: white; padding: 8px; border-radius: 4px;
-        }
-
-        button {
-            padding: 12px 16px; cursor: pointer; border: none; border-radius: 6px; font-weight: bold;
-            min-height: 44px;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #ffffff; margin: 20px; -webkit-user-select: none; }
+        .header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        .controls-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+        input[type="number"], input[type="text"] { background: #333; border: 1px solid #444; color: white; padding: 8px; border-radius: 4px; }
+        button { padding: 12px 16px; cursor: pointer; border: none; border-radius: 6px; font-weight: bold; min-height: 44px; }
         .btn-start-all { background-color: #2e7d32; color: white; }
         .btn-stop-all { background-color: #c62828; color: white; }
         .btn-reset-all { background-color: #424242; color: white; }
-
-        .logo-wrapper {
-            width: 150px; height: 90px; display: flex; justify-content: center; align-items: center; overflow: hidden;
-        }
+        .logo-wrapper { width: 150px; height: 90px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         .logo-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .timer-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 40px;
-        }
-
+        .timer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 40px; }
         .timer-card { background: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 12px; text-align: center; }
         .timer-display { font-size: 1.8rem; font-family: monospace; margin: 10px 0; color: #00e676; }
-
         .class-selector { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-        .btn-class {
-            width: 45px; height: 44px; background-color: #262626; color: white;
-            border-radius: 6px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-weight: bold;
-        }
+        .btn-class { width: 45px; height: 44px; background-color: #262626; color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
         .btn-class.active { background-color: #2e7d32; }
-
         .btn-main { width: 100%; margin-top: 10px; }
         .button-group { display: flex; gap: 8px; margin-top: 10px; }
         .btn-stop { background-color: #c62828; color: white; width: 100%; }
         .btn-resume { background-color: #2e7d32; color: white; flex: 2; }
         .btn-clear { background-color: #424242; color: white; flex: 1; }
-
-        .summary-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 40px;
-        }
-
-        /* --- ปรับปรุง: กรอบพอดี และจัดกลางเสมอ --- */
-        .summary-card {
-            background: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 15px;
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; /* จัดกลางแนวนอน */
-            justify-content: center; /* จัดกลางแนวตั้ง */
-            min-height: 220px; /* ลดความสูงลงมาให้ดูพอดีๆ */
-        }
-        
-        .summary-footer {
-            width: 100%;
-            min-height: 60px; /* จองพื้นที่ปุ่มไว้ 60px ตลอดเวลา */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .summary-title { background-color: #2e7d32; color: white; padding: 5px 25px; border-radius: 8px; display: inline-block; margin-bottom: 15px; font-weight: bold; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .summary-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; width: 100%; min-height: 280px; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+        .summary-header-box { padding: 15px 15px 0 15px; display: flex; flex-direction: column; align-items: center; }
+        .summary-content { padding: 10px 20px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .summary-title { background-color: #2e7d32; color: white; padding: 5px 25px; border-radius: 8px; font-weight: bold; margin-bottom: 10px; }
+        .summary-card p { margin: 4px 0; font-size: 0.95rem; }
+        .summary-footer { width: 100%; display: flex; flex-direction: column; margin-top: auto; }
+        .discount-field-full { width: 100%; background: #181818; border: none; border-top: 1px solid #333; color: #888; padding: 12px; text-align: center; box-sizing: border-box; outline: none; font-size: 0.9rem; }
+        .btn-confirm-full { width: 100%; background-color: #2e7d32; color: white; padding: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; }
         .highlight { color: #00e676; font-weight: bold; }
-
-        .btn-reset-single { background-color: #424242; color: #ddd; font-size: 0.8rem; padding: 8px 12px; width: 100%; border: 1px solid #555; }
-
-        .report-section {
-            background-color: #1a1a1a; border-radius: 20px; padding: 30px; text-align: center; max-width: 800px; margin: 40px auto; border: 1px solid #333;
-        }
+        .report-section { background-color: #1a1a1a; border-radius: 20px; padding: 30px; text-align: center; max-width: 800px; margin: 40px auto; border: 1px solid #333; }
         .report-header { background-color: #000; display: inline-block; padding: 8px 30px; border-radius: 10px; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
         .report-row { margin: 15px 0; font-size: 1.1rem; color: #ddd; }
         .report-btn-reset { background-color: #f1c40f; color: #000; padding: 12px 40px; margin-top: 20px; font-size: 1rem; }
+        .log-section { background-color: #1a1a1a; border-radius: 20px; padding: 20px; max-width: 800px; margin: 20px auto; border: 1px solid #333; }
+        .log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .log-table th { background-color: #333; color: #888; padding: 10px; text-align: left; border-bottom: 2px solid #444; }
+        .log-table td { padding: 10px; border-bottom: 1px solid #222; color: #ddd; }
+        .btn-delete-log { background-color: #c62828; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        .log-empty { padding: 20px; color: #555; font-style: italic; text-align: center; }
     </style>
-
-<style>
-    /* --- แก้ไขส่วน Summary Card ให้เป็นกล่องคงที่ --- */
-    .summary-grid {
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-        gap: 15px; 
-        margin-bottom: 40px;
-    }
-
-    .summary-card {
-        background: #1e1e1e; 
-        border: 1px solid #333; 
-        border-radius: 15px;
-        position: relative; /* เพื่อล็อกตำแหน่งเนื้อหาข้างใน */
-        width: 100%;
-        aspect-ratio: 1 / 1.1; /* ล็อกสัดส่วนกว้างยาวให้คงที่เสมอ (ทรงเดียวกับรูปภาพ b27f5d) */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        padding: 15px;
-        box-sizing: border-box;
-    }
-
-    /* บังคับให้เนื้อหาทุกอย่างซ้อนทับในจุดที่เหมาะสม ไม่ดันขอบ */
-    .summary-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex-grow: 1;
-        width: 100%;
-        text-align: center;
-    }
-
-    .summary-title { 
-        background-color: #2e7d32; 
-        color: white; 
-        padding: 5px 25px; 
-        border-radius: 8px; 
-        font-weight: bold;
-        margin-bottom: 10px;
-        flex-shrink: 0;
-    }
-
-    .summary-footer {
-        width: 100%;
-        height: 50px; /* ล็อกความสูงพื้นที่ปุ่มให้เท่าเดิมตลอด */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .summary-card p {
-        margin: 4px 0; /* ควบคุมระยะห่างระหว่างบรรทัดให้นิ่ง */
-        font-size: 0.95rem;
-    }
-
-    .highlight { color: #00e676; font-weight: bold; }
-    .btn-reset-single { background-color: #424242; color: #ddd; font-size: 0.8rem; padding: 8px 12px; width: 80%; border: 1px solid #555; border-radius: 6px; }
-</style>
-
 </head>
 <body>
 
     <div class="header-container">
         <div class="header-section">
-            <h2>ระบบจับเวลาคาเฟ่รถตัก FN MODEL EXCAVATOR </h2>
+            <h2>ระบบจับเวลาคาเฟ่รถตัก FN MODEL EXCAVATOR</h2>
             <div class="controls-top">
                 <label>จำนวนโต๊ะลูกค้า:</label>
                 <input type="number" id="timerCount" value="8" min="1" max="50">
@@ -199,51 +82,31 @@
             รวมเวลาเล่นทั้งหมด <span class="highlight" id="totalHours">0</span> ชั่วโมง <span class="highlight" id="totalMinutes">0</span> นาที
         </div>
         <div class="report-row" style="font-size: 1.3rem;">
-            เป็นจำนวนเงินทั้งหมด <span class="highlight" id="grandTotal" style="font-size: 1.5rem;">0</span> บาท
+            ราคาทั้งหมด <span class="highlight" id="grandTotal" style="font-size: 1.5rem;">0</span> บาท
         </div>
         <button class="report-btn-reset" onclick="resetFullReport()">รีเซ็ตยอดขายวันนี้</button>
     </div>
 
-
-
-    
-<script>
-    /* --- ปรับฟังก์ชัน Render ให้ใช้โครงสร้างใหม่ --- */
-    function renderSummaryCard(card, timer) {
-        if (timer.isFinished && timer.summary) {
-            card.innerHTML = `
-                <div class="summary-title">${timer.name}</div>
-                <div class="summary-content">
-                    <p>ใช้เวลาทั้งหมด <span class="highlight">${timer.summary.minutes}</span> นาที</p>
-                    <p>Class <span class="highlight">${timer.summary.class}</span></p>
-                    <p>ค่าเปิดโต๊ะ: <span class="highlight">${timer.summary.base}</span> บาท</p>
-                    <p>รวมเป็นเงิน <span class="highlight" style="font-size:1.2rem;">${timer.summary.total}</span> บาท</p>
-                </div>
-                <div class="summary-footer">
-                    <button class="btn-reset-single" onclick="clearTableData(${timer.id})">ล้างข้อมูลโต๊ะนี้</button>
-                </div>`;
-        } else {
-            // กรณี "กำลังเล่น" หรือ "ว่าง" จะแสดงแค่หัวข้อกับสถานะกลางกล่อง
-            const statusText = timer.isRunning ? "กำลังเล่น..." : "ว่าง";
-            const bgColor = timer.isRunning ? "#2e7d32" : "#333";
-            const textColor = timer.isRunning ? "#ffffff" : "#555";
-            
-            card.innerHTML = `
-                <div class="summary-title" style="background:${bgColor}">${timer.name}</div>
-                <div class="summary-content">
-                    <p style="color:${textColor}; font-size: 1.2rem;">${statusText}</p>
-                </div>
-                <div class="summary-footer">
-                    <!-- พื้นที่ว่างจองไว้ให้ปุ่ม -->
-                </div>`;
-        }
-    }
-</script>
-
+    <div class="log-section">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: #00e676;">📜 ประวัติการรับเงิน</h3>
+            <button style="background-color: #c62828; color: white; padding: 8px 20px; font-size: 0.8rem;" onclick="clearAllLogs()">ล้างประวัติทั้งหมด</button>
+        </div>
+        <div id="logTableContainer">
+            <table class="log-table">
+                <thead>
+                    <tr><th>เวลา</th><th>รายการ</th><th>Class</th><th>เวลาเล่น</th><th>ยอดเงิน</th><th style="text-align: center;">ลบ</th></tr>
+                </thead>
+                <tbody id="logBody"></tbody>
+            </table>
+            <div id="logEmpty" class="log-empty">ยังไม่มีประวัติการขายในขณะนี้</div>
+        </div>
+    </div>
 
     <script>
         const CLASS_CONFIG = { 'A': { base: 50, perMin: 5 }, 'B': { base: 30, perMin: 3 }, 'C': { base: 10, perMin: 1 } };
         let reportData = JSON.parse(localStorage.getItem('fn_report')) || { totalClients: 0, countA: 0, countB: 0, countC: 0, totalTimeMs: 0, grandTotal: 0 };
+        let transactionLogs = JSON.parse(localStorage.getItem('fn_logs')) || [];
         let timers = [];
         const container = document.getElementById('timerContainer');
         const summaryContainer = document.getElementById('summaryContainer');
@@ -253,29 +116,42 @@
         function saveData() {
             localStorage.setItem('fn_timers', JSON.stringify(timers.map(t => ({ ...t, interval: null }))));
             localStorage.setItem('fn_report', JSON.stringify(reportData));
+            localStorage.setItem('fn_logs', JSON.stringify(transactionLogs));
             localStorage.setItem('fn_count', countInput.value);
+        }
+
+        function renderLogs() {
+            const logBody = document.getElementById('logBody');
+            const logEmpty = document.getElementById('logEmpty');
+            if (!transactionLogs || transactionLogs.length === 0) { logBody.innerHTML = ''; logEmpty.style.display = 'block'; return; }
+            logEmpty.style.display = 'none';
+            logBody.innerHTML = transactionLogs.map(log => `
+                <tr>
+                    <td>${log.time}</td><td>${log.name}</td><td><span class="highlight">${log.class}</span></td>
+                    <td>${log.duration} นาที</td><td style="color: #00e676; font-weight: bold;">${(log.amount || 0).toLocaleString()}.-</td>
+                    <td style="text-align: center;"><button class="btn-delete-log" onclick="deleteLogEntry(${log.id})">🗑️</button></td>
+                </tr>`).join('');
         }
 
         function createTimers(isLoad = false) {
             const count = isLoad ? (localStorage.getItem('fn_count') || 8) : parseInt(countInput.value);
-            countInput.value = count;
-            container.innerHTML = ''; summaryContainer.innerHTML = ''; nameContainer.innerHTML = '';
-            const savedTimers = isLoad ? JSON.parse(localStorage.getItem('fn_timers')) : null;
+            countInput.value = count; container.innerHTML = ''; summaryContainer.innerHTML = ''; nameContainer.innerHTML = '';
+            const savedTimers = JSON.parse(localStorage.getItem('fn_timers'));
             timers = [];
             for (let i = 1; i <= count; i++) {
                 let timerObj;
                 if (isLoad && savedTimers && savedTimers[i-1]) {
                     timerObj = savedTimers[i-1];
                     if (timerObj.isRunning) {
-                        timerObj.startTime = timerObj.startTime;
+                        timerObj.startTime = Date.now() - timerObj.elapsed;
                         timerObj.interval = setInterval(() => {
                             timerObj.elapsed = Date.now() - timerObj.startTime;
-                            document.getElementById(`display-${timerObj.id}`).textContent = formatTime(timerObj.elapsed);
+                            const el = document.getElementById(`display-${timerObj.id}`);
+                            if(el) el.textContent = formatTime(timerObj.elapsed);
+                            saveData();
                         }, 100);
                     }
-                } else {
-                    timerObj = { id: i, name: `โต๊ะที่ ${i}`, startTime: 0, elapsed: 0, isRunning: false, isFinished: false, interval: null, activeClass: null, summary: null };
-                }
+                } else { timerObj = { id: i, name: `โต๊ะที่ ${i}`, startTime: 0, elapsed: 0, isRunning: false, isFinished: false, interval: null, activeClass: null, summary: null }; }
                 timers.push(timerObj);
                 const card = document.createElement('div'); card.id = `card-${i}`; card.className = 'timer-card';
                 const sCard = document.createElement('div'); sCard.id = `summary-card-${i}`; sCard.className = 'summary-card';
@@ -285,40 +161,36 @@
                 nameDiv.innerHTML = `<label>[${i}]: </label><input type="text" value="${timerObj.name}" oninput="updateName(${i}, this.value)">`;
                 nameContainer.appendChild(nameDiv);
             }
-            updateReportUI();
+            updateReportUI(); renderLogs();
         }
 
         function renderTimerCard(card, timer) {
             let buttonHTML = '';
-            if (timer.isFinished) {
-                buttonHTML = `<div style="color: #f1c40f; padding: 10px; font-weight: bold; border: 1px dashed #f1c40f; border-radius: 6px; margin-top: 10px;">เช็คบิลแล้ว</div>`;
-            } else if (timer.isRunning) {
-                buttonHTML = `<button class="btn-stop" onclick="stopTimer(${timer.id})">หยุด</button>`;
-            } else if (timer.elapsed > 0) {
-                buttonHTML = `<div class="button-group"><button class="btn-resume" onclick="startTimer(${timer.id})">เล่นต่อ</button><button class="btn-clear" onclick="resetTimer(${timer.id})">เสร็จ</button></div>`;
-            } else {
-                buttonHTML = `<button class="btn-start btn-main" style="background-color: #2e7d32; color:white;" onclick="startTimer(${timer.id})">เริ่ม</button>`;
-            }
+            if (timer.isFinished) { buttonHTML = `<div style="color: #f1c40f; padding: 10px; font-weight: bold; border: 1px dashed #f1c40f; border-radius: 6px; margin-top: 10px;">เช็คบิลแล้ว</div>`; }
+            else if (timer.isRunning) { buttonHTML = `<button class="btn-stop" onclick="stopTimer(${timer.id})">หยุด</button>`; }
+            else if (timer.elapsed > 0) { buttonHTML = `<div class="button-group"><button class="btn-resume" onclick="startTimer(${timer.id})">เล่นต่อ</button><button class="btn-clear" onclick="resetTimer(${timer.id})">เสร็จ</button></div>`; }
+            else { buttonHTML = `<button class="btn-start btn-main" style="background-color: #2e7d32; color:white;" onclick="startTimer(${timer.id})">เริ่ม</button>`; }
             card.innerHTML = `<div style="color:#888; font-size:0.9rem;">${timer.name}</div><div class="timer-display" id="display-${timer.id}" style="${timer.isFinished ? 'color: #555;' : ''}">${formatTime(timer.elapsed)}</div><div>${buttonHTML}</div><div class="class-selector" style="${timer.isFinished ? 'pointer-events: none; opacity: 0.5;' : ''}">${['A','B','C'].map(c => `<div class="btn-class ${timer.activeClass === c ? 'active' : ''}" onclick="selectClass(${timer.id}, '${c}')">${c}</div>`).join('')}</div>`;
         }
 
         function renderSummaryCard(card, timer) {
             if (timer.isFinished && timer.summary) {
                 card.innerHTML = `
-                    <div class="summary-title">${timer.name}</div>
-                    <div>
+                    <div class="summary-header-box"><div class="summary-title">${timer.name}</div></div>
+                    <div class="summary-content">
                         <p>ใช้เวลาทั้งหมด <span class="highlight">${timer.summary.minutes}</span> นาที</p>
                         <p>Class <span class="highlight">${timer.summary.class}</span></p>
                         <p>ค่าเปิดโต๊ะ: <span class="highlight">${timer.summary.base}</span> บาท</p>
-                        <p>รวมเป็นเงิน <span class="highlight" style="font-size:1.2rem;">${timer.summary.total}</span> บาท</p>
+                        <p>ราคาทั้งหมด <span class="highlight" id="total-display-${timer.id}" style="font-size:1.2rem;">${timer.summary.total.toLocaleString()}</span> บาท</p>
                     </div>
                     <div class="summary-footer">
-                        <button class="btn-reset-single" onclick="clearTableData(${timer.id})">ล้างข้อมูลโต๊ะนี้</button>
+                        <input type="number" id="discount-input-${timer.id}" class="discount-field-full" placeholder="กรอกจำนวนเงินส่วนลด" oninput="updateTotalWithDiscount(${timer.id})">
+                        <button class="btn-confirm-full" onclick="clearTableData(${timer.id})">ตกลง</button>
                     </div>`;
-            } else if (timer.isRunning) {
-                card.innerHTML = `<div class="summary-title" style="background:#2e7d32">${timer.name}</div><p>กำลังเล่น...</p><div class="summary-footer"></div>`;
             } else {
-                card.innerHTML = `<div class="summary-title" style="background:#333">${timer.name}</div><p style="color:#555">ว่าง</p><div class="summary-footer"></div>`;
+                const statusText = timer.isRunning ? "กำลังเล่น..." : "ว่าง";
+                const titleBg = timer.isRunning ? "#2e7d32" : "#333";
+                card.innerHTML = `<div class="summary-header-box"><div class="summary-title" style="background:${titleBg}">${timer.name}</div></div><div class="summary-content"><p style="color:${timer.isRunning ? "#00e676" : "#555"}; font-size: 1.2rem;">${statusText}</p></div><div class="summary-footer"><input type="text" class="discount-field-full" placeholder="กรอกจำนวนเงิน" disabled style="opacity: 0.3;"><button class="btn-confirm-full" style="background: #222; color: #444; cursor: default;">ตกลง</button></div>`;
             }
         }
 
@@ -330,241 +202,20 @@
             return `${h}:${m}:${s}.${d}`;
         }
 
-        function selectClass(id, className) {
-            const timer = timers.find(t => t.id === id);
-            timer.activeClass = (timer.activeClass === className) ? null : className;
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer);
-        }
-
-        function startTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (!timer.activeClass) { alert("โปรดเลือก Class ก่อนเริ่ม"); return; }
-            timer.isRunning = true; timer.isFinished = false;
-            timer.startTime = Date.now() - timer.elapsed;
-            timer.interval = setInterval(() => {
-                timer.elapsed = Date.now() - timer.startTime;
-                document.getElementById(`display-${id}`).textContent = formatTime(timer.elapsed);
-            }, 100);
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-        }
-
-        function stopTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            clearInterval(timer.interval); timer.isRunning = false;
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-        }
-
-        function resetTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (timer.isFinished) return;
-            if (timer.activeClass) {
-                const config = CLASS_CONFIG[timer.activeClass];
-                const minutes = Math.floor(timer.elapsed / 60000);
-                const total = config.base + (minutes * config.perMin);
-                timer.summary = { minutes, class: timer.activeClass, base: config.base, total };
-                timer.isFinished = true;
-                updateReport(timer.activeClass, timer.elapsed, total);
-            }
-            clearInterval(timer.interval); timer.isRunning = false;
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-        }
-
-        function clearTableData(id) {
-            const timer = timers.find(t => t.id === id);
-            timer.isFinished = false; timer.summary = null; timer.elapsed = 0; timer.activeClass = null;
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-        }
-
-        function updateReport(className, timeMs, money) {
-            reportData.totalClients++; reportData['count' + className]++; reportData.totalTimeMs += timeMs; reportData.grandTotal += money;
-            saveData(); updateReportUI();
-        }
-
-        function updateReportUI() {
-            document.getElementById('totalClients').textContent = reportData.totalClients;
-            document.getElementById('countA').textContent = reportData.countA;
-            document.getElementById('countB').textContent = reportData.countB;
-            document.getElementById('countC').textContent = reportData.countC;
-            document.getElementById('grandTotal').textContent = reportData.grandTotal.toLocaleString();
-            const totalMinsAll = Math.floor(reportData.totalTimeMs / 60000);
-            document.getElementById('totalHours').textContent = Math.floor(totalMinsAll / 60);
-            document.getElementById('totalMinutes').textContent = totalMinsAll % 60;
-        }
-
+        function selectClass(id, className) { const timer = timers.find(t => t.id === id); timer.activeClass = (timer.activeClass === className) ? null : className; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); }
+        function startTimer(id) { const timer = timers.find(t => t.id === id); if (!timer.activeClass) { alert("โปรดเลือก Class ก่อนเริ่ม"); return; } timer.isRunning = true; timer.isFinished = false; timer.startTime = Date.now() - timer.elapsed; timer.interval = setInterval(() => { timer.elapsed = Date.now() - timer.startTime; const el = document.getElementById(`display-${id}`); if(el) el.textContent = formatTime(timer.elapsed); saveData(); }, 100); saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
+        function stopTimer(id) { const timer = timers.find(t => t.id === id); clearInterval(timer.interval); timer.isRunning = false; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
+        function resetTimer(id) { const timer = timers.find(t => t.id === id); if (timer.isFinished) return; if (timer.activeClass) { const config = CLASS_CONFIG[timer.activeClass]; const minutes = Math.floor(timer.elapsed / 60000); const total = config.base + (minutes * config.perMin); timer.summary = { minutes, class: timer.activeClass, base: config.base, total, originalTotal: total, elapsed: timer.elapsed }; timer.isFinished = true; } clearInterval(timer.interval); timer.isRunning = false; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
+        function updateTotalWithDiscount(id) { const timer = timers.find(t => t.id === id); if (!timer || !timer.summary) return; const discount = parseFloat(document.getElementById(`discount-input-${id}`).value) || 0; const newTotal = Math.max(0, timer.summary.originalTotal - discount); timer.summary.total = newTotal; document.getElementById(`total-display-${id}`).textContent = newTotal.toLocaleString(); }
+        function clearTableData(id) { const timer = timers.find(t => t.id === id); if (timer.summary) { reportData.totalClients++; reportData['count' + timer.summary.class]++; reportData.totalTimeMs += timer.summary.elapsed; reportData.grandTotal += timer.summary.total; const now = new Date(); const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0'); transactionLogs.unshift({ id: Date.now(), time: timeStr, name: timer.name, class: timer.summary.class, duration: timer.summary.minutes, amount: timer.summary.total, elapsed: timer.summary.elapsed }); if (transactionLogs.length > 100) transactionLogs.pop(); } timer.isFinished = false; timer.summary = null; timer.elapsed = 0; timer.activeClass = null; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); updateReportUI(); renderLogs(); }
+        function deleteLogEntry(logId) { if (!confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) return; const index = transactionLogs.findIndex(log => log.id === logId); if (index !== -1) { const log = transactionLogs[index]; reportData.totalClients = Math.max(0, reportData.totalClients - 1); reportData['count' + log.class] = Math.max(0, reportData['count' + log.class] - 1); reportData.totalTimeMs = Math.max(0, reportData.totalTimeMs - log.elapsed); reportData.grandTotal = Math.max(0, reportData.grandTotal - log.amount); transactionLogs.splice(index, 1); saveData(); updateReportUI(); renderLogs(); } }
+        function updateReportUI() { document.getElementById('totalClients').textContent = reportData.totalClients; document.getElementById('countA').textContent = reportData.countA; document.getElementById('countB').textContent = reportData.countB; document.getElementById('countC').textContent = reportData.countC; document.getElementById('grandTotal').textContent = reportData.grandTotal.toLocaleString(); const totalMinsAll = Math.floor(reportData.totalTimeMs / 60000); document.getElementById('totalHours').textContent = Math.floor(totalMinsAll / 60); document.getElementById('totalMinutes').textContent = totalMinsAll % 60; }
+        function clearAllLogs() { if (confirm("ลบประวัติการรับเงินทั้งหมดใช่หรือไม่?")) { transactionLogs = []; saveData(); renderLogs(); } }
         function resetFullReport() { if(confirm("ยืนยันรีเซ็ตยอดขายรวมทั้งหมด?")) { reportData = { totalClients: 0, countA: 0, countB: 0, countC: 0, totalTimeMs: 0, grandTotal: 0 }; saveData(); updateReportUI(); } }
-
-        function controlAll(action) {
-            timers.forEach(t => {
-                if (action === 'start') startTimer(t.id);
-                if (action === 'stop') stopTimer(t.id);
-                if (action === 'reset') resetTimer(t.id);
-            });
-        }
-
-        function updateName(id, val) {
-            const timer = timers.find(t => t.id === id);
-            timer.name = val || `โต๊ะที่ ${id}`;
-            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-        }
-
+        function controlAll(action) { timers.forEach(t => { if (action === 'start') startTimer(t.id); if (action === 'stop') stopTimer(t.id); if (action === 'reset') resetTimer(t.id); }); }
+        function updateName(id, val) { const timer = timers.find(t => t.id === id); timer.name = val || `โต๊ะที่ ${id}`; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
         countInput.addEventListener('change', () => { createTimers(); saveData(); });
         window.onload = () => createTimers(true);
     </script>
-
-<!-- เพิ่มส่วนนี้ไว้ก่อนปิด body หรือต่อจากส่วน report-section -->
-<style>
-    .log-section {
-        background-color: #1a1a1a;
-        border-radius: 20px;
-        padding: 20px;
-        max-width: 800px;
-        margin: 20px auto;
-        border: 1px solid #333;
-    }
-    .log-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-        font-size: 0.9rem;
-    }
-    .log-table th {
-        background-color: #333;
-        color: #888;
-        padding: 10px;
-        text-align: left;
-        border-bottom: 2px solid #444;
-    }
-    .log-table td {
-        padding: 10px;
-        border-bottom: 1px solid #222;
-        color: #ddd;
-    }
-    .log-empty {
-        padding: 20px;
-        color: #555;
-        font-style: italic;
-    }
-    .btn-clear-logs {
-        background-color: #c62828;
-        color: white;
-        padding: 8px 20px;
-        font-size: 0.8rem;
-        margin-top: 15px;
-    }
-</style>
-
-<div class="log-section">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="margin: 0; color: #00e676;">📜 ประวัติการรับเงิน</h3>
-        <button class="btn-clear-logs" onclick="clearAllLogs()">ล้างประวัติทั้งหมด</button>
-    </div>
-    <div id="logTableContainer">
-        <table class="log-table">
-            <thead>
-                <tr>
-                    <th>เวลา</th>
-                    <th>รายการ</th>
-                    <th>Class</th>
-                    <th>เวลาเล่น</th>
-                    <th>ยอดเงิน</th>
-                </tr>
-            </thead>
-            <tbody id="logBody">
-                <!-- รายการประวัติจะมาปรากฏที่นี่ -->
-            </tbody>
-        </table>
-        <div id="logEmpty" class="log-empty">ยังไม่มีประวัติการขายในขณะนี้</div>
-    </div>
-</div>
-
-<script>
-    // ดึงข้อมูล Log จาก LocalStorage หรือสร้างใหม่
-    let transactionLogs = JSON.parse(localStorage.getItem('fn_logs')) || [];
-
-    // ฟังก์ชันเพิ่มบันทึกลงใน Log
-    function addTransactionLog(timerName, className, minutes, totalAmount) {
-        const now = new Date();
-        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
-                        now.getMinutes().toString().padStart(2, '0');
-        
-        const newEntry = {
-            time: timeStr,
-            name: timerName,
-            class: className,
-            duration: minutes,
-            amount: totalAmount
-        };
-
-        transactionLogs.unshift(newEntry); // เพิ่มไว้บนสุด
-        if (transactionLogs.length > 100) transactionLogs.pop(); // เก็บไว้สูงสุด 100 รายการ
-        
-        localStorage.setItem('fn_logs', JSON.stringify(transactionLogs));
-        renderLogs();
-    }
-
-    // ฟังก์ชันแสดงรายการ Log
-    function renderLogs() {
-        const logBody = document.getElementById('logBody');
-        const logEmpty = document.getElementById('logEmpty');
-        
-        if (transactionLogs.length === 0) {
-            logBody.innerHTML = '';
-            logEmpty.style.display = 'block';
-            return;
-        }
-
-        logEmpty.style.display = 'none';
-        logBody.innerHTML = transactionLogs.map(log => `
-            <tr>
-                <td>${log.time}</td>
-                <td>${log.name}</td>
-                <td><span class="highlight">${log.class}</span></td>
-                <td>${log.duration} นาที</td>
-                <td style="color: #00e676; font-weight: bold;">${log.amount.toLocaleString()}.-</td>
-            </tr>
-        `).join('');
-    }
-
-    // ฟังก์ชันล้างประวัติ
-    function clearAllLogs() {
-        if (confirm("คุณต้องการลบประวัติการรับเงินทั้งหมดใช่หรือไม่? (ยอดขายรวมจะไม่ถูกลบ)")) {
-            transactionLogs = [];
-            localStorage.setItem('fn_logs', JSON.stringify(transactionLogs));
-            renderLogs();
-        }
-    }
-
-    // แก้ไขฟังก์ชัน resetTimer เดิมของคุณเพื่อพ่วงระบบ Log เข้าไป
-    // ให้คุณค้นหาฟังก์ชัน resetTimer ในโค้ดเดิมแล้วปรับส่วนที่บันทึกข้อมูลดังนี้:
-    function resetTimer(id) {
-        const timer = timers.find(t => t.id === id);
-        if (timer.isFinished) return;
-        if (timer.activeClass) {
-            const config = CLASS_CONFIG[timer.activeClass];
-            const minutes = Math.floor(timer.elapsed / 60000);
-            const total = config.base + (minutes * config.perMin);
-            
-            timer.summary = { minutes, class: timer.activeClass, base: config.base, total };
-            timer.isFinished = true;
-            
-            // --- ส่วนที่เพิ่มใหม่: บันทึกลง Log ---
-            addTransactionLog(timer.name, timer.activeClass, minutes, total);
-            // ----------------------------------
-            
-            updateReport(timer.activeClass, timer.elapsed, total);
-        }
-        clearInterval(timer.interval);
-        timer.isRunning = false;
-        saveData();
-        renderTimerCard(document.getElementById(`card-${id}`), timer);
-        renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
-    }
-
-    // เรียกแสดง Log เมื่อโหลดหน้าเว็บ
-    window.addEventListener('load', () => {
-        renderLogs();
-    });
-</script>
-
 </body>
 </html>
