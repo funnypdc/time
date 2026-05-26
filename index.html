@@ -26,20 +26,34 @@
         .btn-stop { background-color: #c62828; color: white; width: 100%; }
         .btn-resume { background-color: #2e7d32; color: white; flex: 2; }
         .btn-clear { background-color: #424242; color: white; flex: 1; }
+        
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .summary-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; width: 100%; min-height: 280px; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+        .summary-card { background: #1e1e1e; border: 1px solid #333; border-radius: 15px; width: 100%; min-height: 340px; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
         .summary-header-box { padding: 15px 15px 0 15px; display: flex; flex-direction: column; align-items: center; }
         .summary-content { padding: 10px 20px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .summary-title { background-color: #2e7d32; color: white; padding: 5px 25px; border-radius: 8px; font-weight: bold; margin-bottom: 10px; }
         .summary-card p { margin: 4px 0; font-size: 0.95rem; }
+        
+        .pay-type-container { display: flex; gap: 8px; padding: 0 15px 10px 15px; width: 100%; box-sizing: border-box; }
+        .btn-pay-type { flex: 1; padding: 8px 0; background-color: #262626; color: #888; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.85rem; min-height: auto; }
+        .btn-pay-type.active-cash { background-color: #0288d1; color: white; border-color: #0288d1; }
+        .btn-pay-type.active-transfer { background-color: #f57c00; color: white; border-color: #f57c00; }
+        
         .summary-footer { width: 100%; display: flex; flex-direction: column; margin-top: auto; }
         .discount-field-full { width: 100%; background: #181818; border: none; border-top: 1px solid #333; color: #888; padding: 12px; text-align: center; box-sizing: border-box; outline: none; font-size: 0.9rem; }
         .btn-confirm-full { width: 100%; background-color: #2e7d32; color: white; padding: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 1rem; }
         .highlight { color: #00e676; font-weight: bold; }
-        .report-section { background-color: #1a1a1a; border-radius: 20px; padding: 30px; text-align: center; max-width: 800px; margin: 40px auto; border: 1px solid #333; }
+        
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .badge-cash { background-color: #0288d1; color: white; }
+        .badge-transfer { background-color: #f57c00; color: white; }
+
+        .report-section { background-color: #1a1a1a; border-radius: 20px; padding: 30px; text-align: center; max-width: 800px; margin: 40px auto; border: 1px solid #333; position: relative; }
         .report-header { background-color: #000; display: inline-block; padding: 8px 30px; border-radius: 10px; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
         .report-row { margin: 15px 0; font-size: 1.1rem; color: #ddd; }
         .report-btn-reset { background-color: #f1c40f; color: #000; padding: 12px 40px; margin-top: 20px; font-size: 1rem; }
+        .btn-monthly-report { position: absolute; top: 25px; right: 25px; background-color: #0288d1; color: white; padding: 8px 15px; font-size: 0.85rem; border-radius: 6px; }
+        
         .log-section { background-color: #1a1a1a; border-radius: 20px; padding: 20px; max-width: 800px; margin: 20px auto; border: 1px solid #333; }
         .log-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .log-table th { background-color: #333; color: #888; padding: 10px; text-align: left; border-bottom: 2px solid #444; }
@@ -72,16 +86,27 @@
     <div id="summaryContainer" class="summary-grid"></div>
 
     <div class="report-section">
+        <button class="btn-monthly-report" onclick="openMonthlyReportPage()">📊 ดูรายงานสรุปรายเดือน</button>
+        
         <div class="report-header">ลูกค้าทั้งหมด <span id="totalClients">0</span> โต๊ะ</div>
         <div class="report-row">
             Class <span class="highlight">A</span> : <span id="countA">0</span> โต๊ะ &nbsp;&nbsp; 
             Class <span class="highlight">B</span> : <span id="countB">0</span> โต๊ะ &nbsp;&nbsp; 
             Class <span class="highlight">C</span> : <span id="countC">0</span> โต๊ะ
         </div>
+        <div class="report-row" style="font-size: 1rem; color: #aaa;">
+            รายได้ Class A: <span style="color: #00e676; font-weight: bold;" id="incomeA">0</span> บาท &nbsp;&nbsp;|&nbsp;&nbsp; 
+            รายได้ Class B: <span style="color: #00e676; font-weight: bold;" id="incomeB">0</span> บาท &nbsp;&nbsp;|&nbsp;&nbsp; 
+            รายได้ Class C: <span style="color: #00e676; font-weight: bold;" id="incomeC">0</span> บาท
+        </div>
         <div class="report-row">
             รวมเวลาเล่นทั้งหมด <span class="highlight" id="totalHours">0</span> ชั่วโมง <span class="highlight" id="totalMinutes">0</span> นาที
         </div>
-        <div class="report-row" style="font-size: 1.3rem;">
+        <div class="report-row" style="border-top: 1px dashed #333; padding-top: 15px; margin-top: 15px; font-size: 1rem; color: #aaa;">
+            เงินสดรวม: <span style="color: #0288d1; font-weight: bold;" id="cashTotal">0</span> บาท &nbsp;&nbsp;|&nbsp;&nbsp; 
+            เงินโอนรวม: <span style="color: #f57c00; font-weight: bold;" id="transferTotal">0</span> บาท
+        </div>
+        <div class="report-row" style="font-size: 1.3rem; margin-top: 5px;">
             ราคาทั้งหมด <span class="highlight" id="grandTotal" style="font-size: 1.5rem;">0</span> บาท
         </div>
         <button class="report-btn-reset" onclick="resetFullReport()">รีเซ็ตยอดขายวันนี้</button>
@@ -95,7 +120,7 @@
         <div id="logTableContainer">
             <table class="log-table">
                 <thead>
-                    <tr><th>เวลา</th><th>รายการ</th><th>Class</th><th>เวลาเล่น</th><th>ยอดเงิน</th><th style="text-align: center;">ลบ</th></tr>
+                    <tr><th>เวลา</th><th>รายการ</th><th>Class</th><th>เวลาเล่น</th><th>ประเภท</th><th>ยอดเงิน</th><th style="text-align: center;">ลบ</th></tr>
                 </thead>
                 <tbody id="logBody"></tbody>
             </table>
@@ -105,8 +130,9 @@
 
     <script>
         const CLASS_CONFIG = { 'A': { base: 50, perMin: 5 }, 'B': { base: 30, perMin: 3 }, 'C': { base: 10, perMin: 1 } };
-        let reportData = JSON.parse(localStorage.getItem('fn_report')) || { totalClients: 0, countA: 0, countB: 0, countC: 0, totalTimeMs: 0, grandTotal: 0 };
+        let reportData = JSON.parse(localStorage.getItem('fn_report')) || { totalClients: 0, countA: 0, countB: 0, countC: 0, incomeA: 0, incomeB: 0, incomeC: 0, totalTimeMs: 0, grandTotal: 0, cashTotal: 0, transferTotal: 0 };
         let transactionLogs = JSON.parse(localStorage.getItem('fn_logs')) || [];
+        let monthlyHistory = JSON.parse(localStorage.getItem('fn_monthly_history')) || [];
         let timers = [];
         const container = document.getElementById('timerContainer');
         const summaryContainer = document.getElementById('summaryContainer');
@@ -117,6 +143,7 @@
             localStorage.setItem('fn_timers', JSON.stringify(timers.map(t => ({ ...t, interval: null }))));
             localStorage.setItem('fn_report', JSON.stringify(reportData));
             localStorage.setItem('fn_logs', JSON.stringify(transactionLogs));
+            localStorage.setItem('fn_monthly_history', JSON.stringify(monthlyHistory));
             localStorage.setItem('fn_count', countInput.value);
         }
 
@@ -125,12 +152,15 @@
             const logEmpty = document.getElementById('logEmpty');
             if (!transactionLogs || transactionLogs.length === 0) { logBody.innerHTML = ''; logEmpty.style.display = 'block'; return; }
             logEmpty.style.display = 'none';
-            logBody.innerHTML = transactionLogs.map(log => `
+            logBody.innerHTML = transactionLogs.map(log => {
+                const payTypeBadge = log.payType === 'cash' ? '<span class="badge badge-cash">เงินสด</span>' : '<span class="badge badge-transfer">เงินโอน</span>';
+                return `
                 <tr>
                     <td>${log.time}</td><td>${log.name}</td><td><span class="highlight">${log.class}</span></td>
-                    <td>${log.duration} นาที</td><td style="color: #00e676; font-weight: bold;">${(log.amount || 0).toLocaleString()}.-</td>
+                    <td>${log.duration} นาที</td><td>${payTypeBadge}</td><td style="color: #00e676; font-weight: bold;">${(log.amount || 0).toLocaleString()}.-</td>
                     <td style="text-align: center;"><button class="btn-delete-log" onclick="deleteLogEntry(${log.id})">🗑️</button></td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
         }
 
         function createTimers(isLoad = false) {
@@ -151,7 +181,7 @@
                             saveData();
                         }, 100);
                     }
-                } else { timerObj = { id: i, name: `โต๊ะที่ ${i}`, startTime: 0, elapsed: 0, isRunning: false, isFinished: false, interval: null, activeClass: null, summary: null }; }
+                } else { timerObj = { id: i, name: `โต๊ะที่ ${i}`, startTime: 0, elapsed: 0, isRunning: false, isFinished: false, interval: null, activeClass: null, summary: null, payType: null }; }
                 timers.push(timerObj);
                 const card = document.createElement('div'); card.id = `card-${i}`; card.className = 'timer-card';
                 const sCard = document.createElement('div'); sCard.id = `summary-card-${i}`; sCard.className = 'summary-card';
@@ -183,14 +213,16 @@
                         <p>ค่าเปิดโต๊ะ: <span class="highlight">${timer.summary.base}</span> บาท</p>
                         <p>ราคาทั้งหมด <span class="highlight" id="total-display-${timer.id}" style="font-size:1.2rem;">${timer.summary.total.toLocaleString()}</span> บาท</p>
                     </div>
+                    <div class="pay-type-container">
+                        <button class="btn-pay-type ${timer.payType === 'cash' ? 'active-cash' : ''}" onclick="selectPayType(${timer.id}, 'cash')">เงินสด</button>
+                        <button class="btn-pay-type ${timer.payType === 'transfer' ? 'active-transfer' : ''}" onclick="selectPayType(${timer.id}, 'transfer')">เงินโอน</button>
+                    </div>
                     <div class="summary-footer">
                         <input type="number" id="discount-input-${timer.id}" class="discount-field-full" placeholder="กรอกจำนวนเงินส่วนลด" oninput="updateTotalWithDiscount(${timer.id})">
                         <button class="btn-confirm-full" onclick="clearTableData(${timer.id})">ตกลง</button>
                     </div>`;
             } else {
-                const statusText = timer.isRunning ? "กำลังเล่น..." : "ว่าง";
-                const titleBg = timer.isRunning ? "#2e7d32" : "#333";
-                card.innerHTML = `<div class="summary-header-box"><div class="summary-title" style="background:${titleBg}">${timer.name}</div></div><div class="summary-content"><p style="color:${timer.isRunning ? "#00e676" : "#555"}; font-size: 1.2rem;">${statusText}</p></div><div class="summary-footer"><input type="text" class="discount-field-full" placeholder="กรอกจำนวนเงิน" disabled style="opacity: 0.3;"><button class="btn-confirm-full" style="background: #222; color: #444; cursor: default;">ตกลง</button></div>`;
+                card.innerHTML = `<div class="summary-header-box"><div class="summary-title" style="background:#333">${timer.name}</div></div><div class="summary-content"><p style="color:${timer.isRunning ? "#00e676" : "#555"}; font-size: 1.2rem;">${timer.isRunning ? "กำลังเล่น..." : "ว่าง"}</p></div><div class="summary-footer"><input type="text" class="discount-field-full" placeholder="กรอกจำนวนเงิน" disabled style="opacity: 0.3;"><button class="btn-confirm-full" style="background: #222; color: #444; cursor: default;">ตกลง</button></div>`;
             }
         }
 
@@ -202,19 +234,246 @@
             return `${h}:${m}:${s}.${d}`;
         }
 
+        function selectPayType(id, type) {
+            const timer = timers.find(t => t.id === id);
+            timer.payType = (timer.payType === type) ? null : type;
+            saveData();
+            renderSummaryCard(document.getElementById(`summary-card-${id}`), timer);
+        }
+
         function selectClass(id, className) { const timer = timers.find(t => t.id === id); timer.activeClass = (timer.activeClass === className) ? null : className; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); }
         function startTimer(id) { const timer = timers.find(t => t.id === id); if (!timer.activeClass) { alert("โปรดเลือก Class ก่อนเริ่ม"); return; } timer.isRunning = true; timer.isFinished = false; timer.startTime = Date.now() - timer.elapsed; timer.interval = setInterval(() => { timer.elapsed = Date.now() - timer.startTime; const el = document.getElementById(`display-${id}`); if(el) el.textContent = formatTime(timer.elapsed); saveData(); }, 100); saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
         function stopTimer(id) { const timer = timers.find(t => t.id === id); clearInterval(timer.interval); timer.isRunning = false; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
-        function resetTimer(id) { const timer = timers.find(t => t.id === id); if (timer.isFinished) return; if (timer.activeClass) { const config = CLASS_CONFIG[timer.activeClass]; const minutes = Math.floor(timer.elapsed / 60000); const total = config.base + (minutes * config.perMin); timer.summary = { minutes, class: timer.activeClass, base: config.base, total, originalTotal: total, elapsed: timer.elapsed }; timer.isFinished = true; } clearInterval(timer.interval); timer.isRunning = false; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
+        function resetTimer(id) { const timer = timers.find(t => t.id === id); if (timer.isFinished) return; if (timer.activeClass) { const config = CLASS_CONFIG[timer.activeClass]; const minutes = Math.floor(timer.elapsed / 60000); const total = config.base + (minutes * config.perMin); timer.summary = { minutes, class: timer.activeClass, base: config.base, total, originalTotal: total, elapsed: timer.elapsed }; timer.isFinished = true; timer.payType = null; } clearInterval(timer.interval); timer.isRunning = false; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
         function updateTotalWithDiscount(id) { const timer = timers.find(t => t.id === id); if (!timer || !timer.summary) return; const discount = parseFloat(document.getElementById(`discount-input-${id}`).value) || 0; const newTotal = Math.max(0, timer.summary.originalTotal - discount); timer.summary.total = newTotal; document.getElementById(`total-display-${id}`).textContent = newTotal.toLocaleString(); }
-        function clearTableData(id) { const timer = timers.find(t => t.id === id); if (timer.summary) { reportData.totalClients++; reportData['count' + timer.summary.class]++; reportData.totalTimeMs += timer.summary.elapsed; reportData.grandTotal += timer.summary.total; const now = new Date(); const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0'); transactionLogs.unshift({ id: Date.now(), time: timeStr, name: timer.name, class: timer.summary.class, duration: timer.summary.minutes, amount: timer.summary.total, elapsed: timer.summary.elapsed }); if (transactionLogs.length > 100) transactionLogs.pop(); } timer.isFinished = false; timer.summary = null; timer.elapsed = 0; timer.activeClass = null; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); updateReportUI(); renderLogs(); }
-        function deleteLogEntry(logId) { if (!confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) return; const index = transactionLogs.findIndex(log => log.id === logId); if (index !== -1) { const log = transactionLogs[index]; reportData.totalClients = Math.max(0, reportData.totalClients - 1); reportData['count' + log.class] = Math.max(0, reportData['count' + log.class] - 1); reportData.totalTimeMs = Math.max(0, reportData.totalTimeMs - log.elapsed); reportData.grandTotal = Math.max(0, reportData.grandTotal - log.amount); transactionLogs.splice(index, 1); saveData(); updateReportUI(); renderLogs(); } }
-        function updateReportUI() { document.getElementById('totalClients').textContent = reportData.totalClients; document.getElementById('countA').textContent = reportData.countA; document.getElementById('countB').textContent = reportData.countB; document.getElementById('countC').textContent = reportData.countC; document.getElementById('grandTotal').textContent = reportData.grandTotal.toLocaleString(); const totalMinsAll = Math.floor(reportData.totalTimeMs / 60000); document.getElementById('totalHours').textContent = Math.floor(totalMinsAll / 60); document.getElementById('totalMinutes').textContent = totalMinsAll % 60; }
+        
+        function clearTableData(id) { 
+            const timer = timers.find(t => t.id === id); 
+            if (timer.isFinished && !timer.payType) { alert("กรุณาเลือกประเภทการชำระเงิน (เงินสด หรือ เงินโอน) ก่อนกดตกลงครับ"); return; }
+            if (timer.summary) { 
+                reportData.totalClients++; 
+                reportData['count' + timer.summary.class]++; 
+                reportData.totalTimeMs += timer.summary.elapsed; 
+                reportData.grandTotal += timer.summary.total; 
+                reportData['income' + timer.summary.class] = (reportData['income' + timer.summary.class] || 0) + timer.summary.total;
+                if (timer.payType === 'cash') { reportData.cashTotal = (reportData.cashTotal || 0) + timer.summary.total; } 
+                else if (timer.payType === 'transfer') { reportData.transferTotal = (reportData.transferTotal || 0) + timer.summary.total; }
+                const now = new Date(); 
+                const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0'); 
+                transactionLogs.unshift({ id: Date.now(), time: timeStr, name: timer.name, class: timer.summary.class, duration: timer.summary.minutes, amount: timer.summary.total, elapsed: timer.summary.elapsed, payType: timer.payType }); 
+                if (transactionLogs.length > 100) transactionLogs.pop(); 
+            } 
+            timer.isFinished = false; timer.summary = null; timer.elapsed = 0; timer.activeClass = null; timer.payType = null; 
+            saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); updateReportUI(); renderLogs(); 
+        }
+
+        function deleteLogEntry(logId) { 
+            if (!confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) return; 
+            const index = transactionLogs.findIndex(log => log.id === logId); 
+            if (index !== -1) { 
+                const log = transactionLogs[index]; 
+                reportData.totalClients = Math.max(0, reportData.totalClients - 1); 
+                reportData['count' + log.class] = Math.max(0, reportData['count' + log.class] - 1); 
+                reportData.totalTimeMs = Math.max(0, reportData.totalTimeMs - log.elapsed); 
+                reportData.grandTotal = Math.max(0, reportData.grandTotal - log.amount); 
+                reportData['income' + log.class] = Math.max(0, (reportData['income' + log.class] || 0) - log.amount);
+                if (log.payType === 'cash') { reportData.cashTotal = Math.max(0, (reportData.cashTotal || 0) - log.amount); } 
+                else if (log.payType === 'transfer') { reportData.transferTotal = Math.max(0, (reportData.transferTotal || 0) - log.amount); }
+                transactionLogs.splice(index, 1); saveData(); updateReportUI(); renderLogs(); 
+            } 
+        }
+
+        function updateReportUI() { 
+            document.getElementById('totalClients').textContent = reportData.totalClients; 
+            document.getElementById('countA').textContent = reportData.countA; 
+            document.getElementById('countB').textContent = reportData.countB; 
+            document.getElementById('countC').textContent = reportData.countC; 
+            document.getElementById('incomeA').textContent = (reportData.incomeA || 0).toLocaleString();
+            document.getElementById('incomeB').textContent = (reportData.incomeB || 0).toLocaleString();
+            document.getElementById('incomeC').textContent = (reportData.incomeC || 0).toLocaleString();
+            document.getElementById('grandTotal').textContent = reportData.grandTotal.toLocaleString(); 
+            document.getElementById('cashTotal').textContent = (reportData.cashTotal || 0).toLocaleString();
+            document.getElementById('transferTotal').textContent = (reportData.transferTotal || 0).toLocaleString();
+            const totalMinsAll = Math.floor(reportData.totalTimeMs / 60000); 
+            document.getElementById('totalHours').textContent = Math.floor(totalMinsAll / 60); 
+            document.getElementById('totalMinutes').textContent = totalMinsAll % 60; 
+        }
+
         function clearAllLogs() { if (confirm("ลบประวัติการรับเงินทั้งหมดใช่หรือไม่?")) { transactionLogs = []; saveData(); renderLogs(); } }
-        function resetFullReport() { if(confirm("ยืนยันรีเซ็ตยอดขายรวมทั้งหมด?")) { reportData = { totalClients: 0, countA: 0, countB: 0, countC: 0, totalTimeMs: 0, grandTotal: 0 }; saveData(); updateReportUI(); } }
+        
+        // แก้ไขฟังก์ชันรีเซ็ตประจำวันให้บวกทบยอดเงินเก่าอย่างถูกต้อง
+        function resetFullReport() { 
+            if(confirm("ยืนยันรีเซ็ตยอดขายรวมประจำวัน? (ระบบจะนำยอดของรอบนี้ไปบวกทบเข้ารายงานรายเดือนของวันนี้ให้ทันทีก่อนล้างค่าหน้าจอ)")) { 
+                
+                if(reportData.grandTotal > 0) {
+                    const today = new Date();
+                    const dateStr = today.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    // ค้นหาว่าวันนี้เคยมีบันทึกอยู่แล้วหรือไม่
+                    const existingIndex = monthlyHistory.findIndex(item => item.date === dateStr);
+                    
+                    if (existingIndex !== -1) {
+                        // บรรทัดสำคัญ: ถ้ามีอยู่แล้วให้ "บวกทบเพิ่ม" ค่าใหม่เข้าไป ไม่ใช่แทนที่ของเก่า
+                        monthlyHistory[existingIndex].totalClients += reportData.totalClients;
+                        monthlyHistory[existingIndex].countA += reportData.countA;
+                        monthlyHistory[existingIndex].countB += reportData.countB;
+                        monthlyHistory[existingIndex].countC += reportData.countC;
+                        monthlyHistory[existingIndex].incomeA += reportData.incomeA;
+                        monthlyHistory[existingIndex].incomeB += reportData.incomeB;
+                        monthlyHistory[existingIndex].incomeC += reportData.incomeC;
+                        monthlyHistory[existingIndex].cashTotal += reportData.cashTotal;
+                        monthlyHistory[existingIndex].transferTotal += reportData.transferTotal;
+                        monthlyHistory[existingIndex].grandTotal += reportData.grandTotal;
+                        monthlyHistory[existingIndex].timestamp = Date.now(); // อัปเดตเวลาล่าสุด
+                    } else {
+                        // ถ้ายังไม่มีเลย (เพิ่งกดรีเซ็ตครั้งแรกของวัน) ให้เพิ่มแถวใหม่เข้าไปปกติ
+                        monthlyHistory.push({
+                            date: dateStr,
+                            timestamp: Date.now(),
+                            totalClients: reportData.totalClients,
+                            countA: reportData.countA,
+                            countB: reportData.countB,
+                            countC: reportData.countC,
+                            incomeA: reportData.incomeA,
+                            incomeB: reportData.incomeB,
+                            incomeC: reportData.incomeC,
+                            cashTotal: reportData.cashTotal,
+                            transferTotal: reportData.transferTotal,
+                            grandTotal: reportData.grandTotal
+                        });
+                    }
+                }
+
+                reportData = { totalClients: 0, countA: 0, countB: 0, countC: 0, incomeA: 0, incomeB: 0, incomeC: 0, totalTimeMs: 0, grandTotal: 0, cashTotal: 0, transferTotal: 0 }; 
+                saveData(); 
+                updateReportUI(); 
+                alert("รวมยอดขายเข้าสรุปรายเดือน และรีเซ็ตยอดขายประจำวันสำเร็จครับ!");
+            } 
+        }
+        
         function controlAll(action) { timers.forEach(t => { if (action === 'start') startTimer(t.id); if (action === 'stop') stopTimer(t.id); if (action === 'reset') resetTimer(t.id); }); }
         function updateName(id, val) { const timer = timers.find(t => t.id === id); timer.name = val || `โต๊ะที่ ${id}`; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
         countInput.addEventListener('change', () => { createTimers(); saveData(); });
+
+        function openMonthlyReportPage() {
+            const reportWindow = window.open("", "_blank");
+            const historyData = JSON.parse(localStorage.getItem('fn_monthly_history')) || [];
+            historyData.sort((a, b) => b.timestamp - a.timestamp);
+
+            let rowsHTML = historyData.map(item => `
+                <tr>
+                    <td>${item.date}</td>
+                    <td class="num">${item.totalClients}</td>
+                    <td class="num font-green">${item.grandTotal.toLocaleString()}</td>
+                    <td class="num">${item.countA}</td>
+                    <td class="num">${item.incomeA.toLocaleString()}</td>
+                    <td class="num">${item.countB}</td>
+                    <td class="num">${item.incomeB.toLocaleString()}</td>
+                    <td class="num">${item.countC}</td>
+                    <td class="num">${item.incomeC.toLocaleString()}</td>
+                    <td class="num font-blue">${item.cashTotal.toLocaleString()}</td>
+                    <td class="num font-orange">${item.transferTotal.toLocaleString()}</td>
+                </tr>
+            `).join('');
+
+            if(historyData.length === 0) { rowsHTML = `<tr><td colspan="11" class="empty">ยังไม่มีข้อมูลรายวันถูกบันทึกไว้ (ข้อมูลจะบันทึกเมื่อกดปุ่ม "รีเซ็ตยอดขายวันนี้")</td></tr>`; }
+
+            const sumGrand = historyData.reduce((sum, item) => sum + item.grandTotal, 0);
+            const sumClients = historyData.reduce((sum, item) => sum + item.totalClients, 0);
+            const sumcA = historyData.reduce((sum, item) => sum + item.countA, 0);
+            const sumiaA = historyData.reduce((sum, item) => sum + item.incomeA, 0);
+            const sumcB = historyData.reduce((sum, item) => sum + item.countB, 0);
+            const sumiaB = historyData.reduce((sum, item) => sum + item.incomeB, 0);
+            const sumcC = historyData.reduce((sum, item) => sum + item.countC, 0);
+            const sumiaC = historyData.reduce((sum, item) => sum + item.incomeC, 0);
+            const sumCash = historyData.reduce((sum, item) => sum + item.cashTotal, 0);
+            const sumTransfer = historyData.reduce((sum, item) => sum + item.transferTotal, 0);
+
+            reportWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>รายงานสรุปยอดบัญชีรายวัน/รายเดือน - FN MODEL EXCAVATOR</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ffffff; color: #333333; margin: 30px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .btn-container { display: flex; justify-content: space-between; margin-bottom: 20px; }
+                        button { padding: 10px 20px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; }
+                        .btn-print { background-color: #2e7d32; color: white; }
+                        .btn-clear { background-color: #c62828; color: white; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+                        th { background-color: #f5f5f5; color: #333; padding: 12px 8px; border: 1px solid #dddddd; font-weight: bold; text-align: center; }
+                        td { padding: 10px 8px; border: 1px solid #dddddd; text-align: center; }
+                        tr:nth-child(even) { background-color: #f9f9f9; }
+                        .num { text-align: right; font-weight: bold; }
+                        .font-green { color: #2e7d32; }
+                        .font-blue { color: #0288d1; }
+                        .font-orange { color: #e65100; }
+                        .total-row { background-color: #eaeff5 !important; font-weight: bold; }
+                        .empty { padding: 30px; color: #999; font-style: italic; }
+                        @media print { .btn-container { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>📊 รายงานสรุปยอดบัญชีคาเฟ่รถตัก FN MODEL EXCAVATOR</h2>
+                        <p>ข้อมูลบันทึกรายวันเพื่อประกอบการทำบัญชีร้าน</p>
+                    </div>
+                    <div class="btn-container">
+                        <button class="btn-print" onclick="window.print()">🖨️ พิมพ์รายงาน / บันทึกเป็น PDF</button>
+                        <button class="btn-clear" onclick="if(confirm('⚠ คำเตือน: คุณต้องการล้างข้อมูลรายงานสรุปบัญชีรายเดือนทั้งหมดใช่หรือไม่? (ข้อมูลจะหายถาวร)')){window.opener.clearMonthlyHistory(); window.close();}">🗑️ ล้างข้อมูลบัญชีทั้งหมด</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2">วันที่</th>
+                                <th rowspan="2">จำนวนลูกค้า<br>(โต๊ะ)</th>
+                                <th rowspan="2">รายได้ทั้งหมด<br>(บาท)</th>
+                                <th colspan="2">Class A</th>
+                                <th colspan="2">Class B</th>
+                                <th colspan="2">Class C</th>
+                                <th rowspan="2">เงินสด<br>(บาท)</th>
+                                <th rowspan="2">เงินโอน<br>(บาท)</th>
+                            </tr>
+                            <tr>
+                                <th>จำนวนโต๊ะ</th>
+                                <th>รายได้</th>
+                                <th>จำนวนโต๊ะ</th>
+                                <th>รายได้</th>
+                                <th>จำนวนโต๊ะ</th>
+                                <th>รายได้</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHTML}
+                            <tr class="total-row">
+                                <td>ยอดรวมสุทธิ</td>
+                                <td class="num">${sumClients}</td>
+                                <td class="num font-green">${sumGrand.toLocaleString()}</td>
+                                <td class="num">${sumcA}</td>
+                                <td class="num">${sumiaA.toLocaleString()}</td>
+                                <td class="num">${sumcB}</td>
+                                <td class="num">${sumiaB.toLocaleString()}</td>
+                                <td class="num">${sumcC}</td>
+                                <td class="num">${sumiaC.toLocaleString()}</td>
+                                <td class="num font-blue">${sumCash.toLocaleString()}</td>
+                                <td class="num font-orange">${sumTransfer.toLocaleString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `);
+            reportWindow.document.close();
+        }
+
+        window.clearMonthlyHistory = function() {
+            monthlyHistory = [];
+            localStorage.setItem('fn_monthly_history', JSON.stringify(monthlyHistory));
+            alert("ล้างข้อมูลรายงานบัญชีรายเดือนเรียบร้อยแล้วครับ");
+        };
+
         window.onload = () => createTimers(true);
     </script>
 </body>
