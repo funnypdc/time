@@ -483,5 +483,27 @@
 
         window.onload = () => createTimers(true);
     </script>
+
+    <div class="report-section" style="border: 2px dashed #c62828; margin-top: 20px;">
+    <h4 style="color: #c62828;">สำหรับ iPad: ปุ่มล้างข้อมูลสำรอง</h4>
+    <p style="font-size: 0.8rem; color: #888;">หากกดล้างในหน้ารายงานไม่ได้ ให้ใช้ปุ่มด้านล่างนี้แทนครับ</p>
+    <button class="btn-clear" style="background-color: #c62828; color: white; width: 100%; padding: 15px;" 
+            onclick="forceClearAllData()">
+        🗑️ ล้างข้อมูลรายเดือนทั้งหมด (iPad)
+    </button>
+</div>
+
+<script>
+// เพิ่มฟังก์ชันนี้ไว้ในส่วน <script> ของหน้าหลักของคุณครับ
+function forceClearAllData() {
+    if(confirm("⚠ ยืนยันการล้างข้อมูลสรุปรายเดือนทั้งหมดถาวร?")) {
+        // ล้างข้อมูลจากต้นทาง
+        localStorage.removeItem('fn_monthly_history');
+        // รีเฟรชหน้าจอเพื่อให้ข้อมูลหายไป
+        alert("ล้างข้อมูลเรียบร้อยแล้วครับ");
+        location.reload();
+    }
+}
+</script>
 </body>
 </html>
