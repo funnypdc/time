@@ -301,19 +301,14 @@
 
         function clearAllLogs() { if (confirm("ลบประวัติการรับเงินทั้งหมดใช่หรือไม่?")) { transactionLogs = []; saveData(); renderLogs(); } }
         
-        // แก้ไขฟังก์ชันรีเซ็ตประจำวันให้บวกทบยอดเงินเก่าอย่างถูกต้อง
         function resetFullReport() { 
             if(confirm("ยืนยันรีเซ็ตยอดขายรวมประจำวัน? (ระบบจะนำยอดของรอบนี้ไปบวกทบเข้ารายงานรายเดือนของวันนี้ให้ทันทีก่อนล้างค่าหน้าจอ)")) { 
-                
                 if(reportData.grandTotal > 0) {
                     const today = new Date();
                     const dateStr = today.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
-                    
-                    // ค้นหาว่าวันนี้เคยมีบันทึกอยู่แล้วหรือไม่
                     const existingIndex = monthlyHistory.findIndex(item => item.date === dateStr);
                     
                     if (existingIndex !== -1) {
-                        // บรรทัดสำคัญ: ถ้ามีอยู่แล้วให้ "บวกทบเพิ่ม" ค่าใหม่เข้าไป ไม่ใช่แทนที่ของเก่า
                         monthlyHistory[existingIndex].totalClients += reportData.totalClients;
                         monthlyHistory[existingIndex].countA += reportData.countA;
                         monthlyHistory[existingIndex].countB += reportData.countB;
@@ -324,36 +319,33 @@
                         monthlyHistory[existingIndex].cashTotal += reportData.cashTotal;
                         monthlyHistory[existingIndex].transferTotal += reportData.transferTotal;
                         monthlyHistory[existingIndex].grandTotal += reportData.grandTotal;
-                        monthlyHistory[existingIndex].timestamp = Date.now(); // อัปเดตเวลาล่าสุด
+                        monthlyHistory[existingIndex].timestamp = Date.now();
                     } else {
-                        // ถ้ายังไม่มีเลย (เพิ่งกดรีเซ็ตครั้งแรกของวัน) ให้เพิ่มแถวใหม่เข้าไปปกติ
                         monthlyHistory.push({
-                            date: dateStr,
-                            timestamp: Date.now(),
-                            totalClients: reportData.totalClients,
-                            countA: reportData.countA,
-                            countB: reportData.countB,
-                            countC: reportData.countC,
-                            incomeA: reportData.incomeA,
-                            incomeB: reportData.incomeB,
-                            incomeC: reportData.incomeC,
-                            cashTotal: reportData.cashTotal,
-                            transferTotal: reportData.transferTotal,
-                            grandTotal: reportData.grandTotal
+                            date: dateStr, timestamp: Date.now(), totalClients: reportData.totalClients,
+                            countA: reportData.countA, countB: reportData.countB, countC: reportData.countC,
+                            incomeA: reportData.incomeA, incomeB: reportData.incomeB, incomeC: reportData.incomeC,
+                            cashTotal: reportData.cashTotal, transferTotal: reportData.transferTotal, grandTotal: reportData.grandTotal
                         });
                     }
                 }
-
                 reportData = { totalClients: 0, countA: 0, countB: 0, countC: 0, incomeA: 0, incomeB: 0, incomeC: 0, totalTimeMs: 0, grandTotal: 0, cashTotal: 0, transferTotal: 0 }; 
-                saveData(); 
-                updateReportUI(); 
-                alert("รวมยอดขายเข้าสรุปรายเดือน และรีเซ็ตยอดขายประจำวันสำเร็จครับ!");
+                saveData(); updateReportUI(); alert("รวมยอดขายเข้าสรุปรายเดือน และรีเซ็ตยอดขายประจำวันสำเร็จครับ!");
             } 
         }
         
         function controlAll(action) { timers.forEach(t => { if (action === 'start') startTimer(t.id); if (action === 'stop') stopTimer(t.id); if (action === 'reset') resetTimer(t.id); }); }
         function updateName(id, val) { const timer = timers.find(t => t.id === id); timer.name = val || `โต๊ะที่ ${id}`; saveData(); renderTimerCard(document.getElementById(`card-${id}`), timer); renderSummaryCard(document.getElementById(`summary-card-${id}`), timer); }
         countInput.addEventListener('change', () => { createTimers(); saveData(); });
+
+        // เพิ่มฟังก์ชันสำหรับรองรับการล้างข้อมูลจากหน้าต่างรายงานโดยตรง (แก้ปัญหา iPad)
+        window.clearMonthlyHistory = function() {
+            monthlyHistory = [];
+            localStorage.setItem('fn_monthly_history', JSON.stringify(monthlyHistory));
+            alert("ล้างข้อมูลรายงานบัญชีรายเดือนเรียบร้อยแล้วครับ");
+            // ส่งสัญญาณแจ้งเตือนไปยังแท็บรายงานอื่นๆ
+            localStorage.setItem('fn_refresh_signal', Date.now());
+        };
 
         function openMonthlyReportPage() {
             const reportWindow = window.open("", "_blank");
@@ -422,7 +414,7 @@
                     </div>
                     <div class="btn-container">
                         <button class="btn-print" onclick="window.print()">🖨️ พิมพ์รายงาน / บันทึกเป็น PDF</button>
-                        <button class="btn-clear" onclick="if(confirm('⚠ คำเตือน: คุณต้องการล้างข้อมูลรายงานสรุปบัญชีรายเดือนทั้งหมดใช่หรือไม่? (ข้อมูลจะหายถาวร)')){window.opener.clearMonthlyHistory(); window.close();}">🗑️ ล้างข้อมูลบัญชีทั้งหมด</button>
+                        <button class="btn-clear" onclick="handleClearData()">🗑️ ล้างข้อมูลบัญชีทั้งหมด</button>
                     </div>
                     <table>
                         <thead>
@@ -462,17 +454,32 @@
                             </tr>
                         </tbody>
                     </table>
+                    <script>
+                        function handleClearData() {
+                            if(confirm('⚠ คำเตือน: คุณต้องการล้างข้อมูลรายงานสรุปบัญชีรายเดือนทั้งหมดใช่หรือไม่? (ข้อมูลจะหายถาวร)')) {
+                                // วิธีแก้ปัญหา iPad: สั่งล้างข้อมูลโดยตรงในระบบเก็บข้อมูลร่วมกัน (localStorage)
+                                localStorage.setItem('fn_monthly_history', JSON.stringify([]));
+                                alert('ล้างข้อมูลรายงานบัญชีรายเดือนเรียบร้อยแล้วครับ');
+                                // สั่งรีเฟรชหน้าหลักเพื่อให้จำข้อมูลใหม่
+                                if(window.opener) {
+                                    try { window.opener.location.reload(); } catch(e){}
+                                }
+                                window.close();
+                            }
+                        }
+                    <\/script>
                 </body>
                 </html>
             `);
             reportWindow.document.close();
         }
 
-        window.clearMonthlyHistory = function() {
-            monthlyHistory = [];
-            localStorage.setItem('fn_monthly_history', JSON.stringify(monthlyHistory));
-            alert("ล้างข้อมูลรายงานบัญชีรายเดือนเรียบร้อยแล้วครับ");
-        };
+        // คอยดักฟังเผื่อว่าหน้าต่างรายงานมีการสั่งล้างข้อมูล ระบบหน้าแรกจะได้รีเฟรชยอดให้ตรงกัน
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'fn_refresh_signal' || e.key === 'fn_monthly_history') {
+                monthlyHistory = JSON.parse(localStorage.getItem('fn_monthly_history')) || [];
+            }
+        });
 
         window.onload = () => createTimers(true);
     </script>
